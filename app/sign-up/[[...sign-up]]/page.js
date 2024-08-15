@@ -7,7 +7,7 @@ import {
   Box,
 } from '@mui/material';
 import Link from 'next/link';
-import { SignIn, useUser } from '@clerk/nextjs';
+import { SignUp, useUser } from '@clerk/nextjs';
 
 export default function SignUpPage() {
   return (
@@ -33,8 +33,8 @@ export default function SignUpPage() {
         alignItems="center"
         justifyContent="center"
       >
-        <Typography variant="h4">Sign In</Typography>
-        <SignIn />
+        <Typography variant="h4">Sign Up</Typography>
+        <SignUp />
       </Box>
     </Container>
   );

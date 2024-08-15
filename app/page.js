@@ -18,14 +18,18 @@ export default function Home() {
         <meta name="description" content="Create flashcard from your text" />
       </Head>
 
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: '#3f51b5' }}>
         <Toolbar>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
             Flashcard SaaS
           </Typography>
           <SignedOut>
-            <Button color="inherit">Log In</Button>
-            <Button color="inherit">Sign Up</Button>
+            <Button color="inherit" href="/sign-in">
+              Log In
+            </Button>
+            <Button color="inherit" href="/sign-up">
+              Sign Up
+            </Button>
           </SignedOut>
 
           <SignedIn>
