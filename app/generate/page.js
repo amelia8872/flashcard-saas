@@ -18,7 +18,13 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { writeBatch, doc, collection, getDoc } from 'firebase/firestore';
+import {
+  writeBatch,
+  doc,
+  collection,
+  getDoc,
+  setDoc,
+} from 'firebase/firestore';
 import { db } from '@/firebase';
 
 export default function Generate() {
@@ -66,8 +72,8 @@ export default function Generate() {
     const docSnap = await getDoc(userDocRef);
 
     if (docSnap.exists()) {
-      const collection = docSnap.data().flashcards || [];
-      if (collection.find((item) => item.name === name)) {
+      const collections = docSnap.data().flashcards || [];
+      if (collections.find((item) => item.name === name)) {
         alert('You already have flashcards with this name');
         return;
       } else {
@@ -80,7 +86,8 @@ export default function Generate() {
 
     const colRef = collection(userDocRef, name);
     flashcards.forEach((flashcard) => {
-      batch.set(colRef, flashcard);
+      const cardDocRef = doc(colRef);
+      batch.set(cardDocRef, flashcard);
     });
 
     await batch.commit();
