@@ -1,3 +1,6 @@
+'use client';
+
+import Stripe from 'stripe';
 import getStripe from '@/utils/get-stripe';
 import { Container } from '@mui/material';
 
@@ -11,6 +14,31 @@ import Head from 'next/head';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 export default function Home() {
+  const handleSubmit = async () => {
+    const checkoutSession = await fetch('/api/checkout_session', {
+      method: 'POST',
+      headers: {
+        origin: 'http://localhost:3000/',
+      },
+    });
+
+    const checkoutSessionJson = await checkoutSession.json();
+
+    if (checkoutSessionJson.statusCode === 500) {
+      console.error(checkoutSessionJson.message);
+      return;
+    }
+
+    const stripe = await getStripe();
+    const { error } = await stripe.redirectToCheckout({
+      sessionId: checkoutSessionJson.id,
+    });
+
+    if (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Container maxWidth="100vw">
       <Head>
@@ -142,7 +170,12 @@ export default function Home() {
                 {''}
                 Unlimited flashcards and storage, plus advanced features.
               </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={handleSubmit}
+              >
                 Choose Pro
               </Button>
             </Box>
@@ -166,7 +199,12 @@ export default function Home() {
                 {''}
                 Enjoy all the features of Pro, plus priority support and more.
               </Typography>
-              <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{ mt: 2 }}
+                onClick={handleSubmit}
+              >
                 Choose Ultimate
               </Button>
             </Box>
